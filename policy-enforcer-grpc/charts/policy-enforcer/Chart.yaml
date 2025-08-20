@@ -1,0 +1,6 @@
+apiVersion: v2
+name: policy-enforcer
+description: A simple gRPC policy service with mTLS
+type: application
+version: 0.1.0
+appVersion: "0.1.0"

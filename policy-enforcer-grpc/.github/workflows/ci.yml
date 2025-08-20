@@ -1,0 +1,17 @@
+name: CI
+on:
+  push: { branches: [ "main" ] }
+  pull_request: { branches: [ "main" ] }
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with: { go-version: '1.22' }
+      - run: |
+          sudo apt-get update && sudo apt-get install -y protobuf-compiler
+          go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+          go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+      - run: protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative proto/policy.proto
+      - run: go build ./server && go build ./client

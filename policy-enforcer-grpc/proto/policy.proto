@@ -1,0 +1,15 @@
+syntax = "proto3";
+package policy.v1;
+option go_package = "github.com/ksdbh/policy-enforcer-grpc/proto/policyv1";
+message EvaluateRequest {
+  string resource = 1;
+  string action = 2;
+  map<string, string> attributes = 3;
+}
+message EvaluateResponse {
+  bool allow = 1;
+  repeated string reasons = 2;
+}
+service PolicyService {
+  rpc Evaluate (EvaluateRequest) returns (EvaluateResponse);
+}

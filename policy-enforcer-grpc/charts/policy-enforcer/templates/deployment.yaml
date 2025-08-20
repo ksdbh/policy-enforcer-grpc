@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: policy-enforcer }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: policy-enforcer } }
+  template:
+    metadata: { labels: { app: policy-enforcer } }
+    spec:
+      containers:
+      - name: policy-enforcer
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports: [ { containerPort: 50051 } ]
+        env:
+        - { name: TLS_CERT, value: "/certs/server.pem" }
+        - { name: TLS_KEY,  value: "/certs/server.key" }
+        - { name: TLS_CA,   value: "/certs/ca.pem" }
+        volumeMounts:
+        - { name: certs, mountPath: /certs }
+      volumes:
+      - name: certs
+        secret: { secretName: policy-enforcer-certs }

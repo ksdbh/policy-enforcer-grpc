@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Service
+metadata: { name: policy-enforcer }
+spec:
+  selector: { app: policy-enforcer }
+  ports: [ { protocol: TCP, port: 50051, targetPort: 50051 } ]
+  type: ClusterIP
